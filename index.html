@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090d18">
+<title>Nova Player — Universal Media</title>
+<style>
+:root{--bg:#080c16;--panel:#111827;--panel2:#172235;--line:#26344b;--text:#f4f7ff;--muted:#94a3b8;--accent:#8b5cf6;--accent2:#22d3ee;--radius:20px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#1d1741 0,transparent 34%),radial-gradient(ellipse at 95% 10%,#0b3444 0,transparent 30%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer;color:inherit}.app{max-width:1500px;margin:auto;padding:24px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px}.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 8px 28px #8b5cf644;font-size:23px}.brand h1{font-size:20px;margin:0;letter-spacing:.2px}.brand p{margin:1px 0 0;color:var(--muted);font-size:12px}.top-actions{display:flex;gap:10px;align-items:center}.pill,.icon-btn,.action{border:1px solid var(--line);background:#111a2a;border-radius:12px;padding:10px 14px;transition:.2s}.pill:hover,.icon-btn:hover,.action:hover{border-color:#7c6bf1;background:#1b2740}.status{color:#86efac;font-size:12px;display:flex;gap:7px;align-items:center}.dot{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px #4ade80}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px;align-items:start}.main,.sidebar{min-width:0}.player-shell{background:#05070c;border:1px solid #263044;border-radius:24px;overflow:hidden;box-shadow:0 24px 70px #0008}.screen{position:relative;aspect-ratio:16/9;display:grid;place-items:center;background:radial-gradient(ellipse at center,#18243a,#05070c 70%);overflow:hidden}.screen video{width:100%;height:100%;object-fit:contain;background:#000;display:none}.screen.has-video video{display:block}.welcome{position:absolute;text-align:center;padding:24px;max-width:480px}.welcome .big-icon{width:82px;height:82px;border-radius:26px;margin:0 auto 18px;display:grid;place-items:center;background:linear-gradient(145deg,#8b5cf633,#22d3ee22);border:1px solid #ffffff20;font-size:38px}.welcome h2{font-size:25px;margin:0 0 7px}.welcome p{color:var(--muted);margin:0 0 20px}.screen.has-video .welcome{display:none}.primary{border:0;background:linear-gradient(110deg,var(--accent),#536dff);padding:12px 20px;border-radius:12px;font-weight:700;box-shadow:0 8px 24px #725cf544}.primary:hover{filter:brightness(1.12);transform:translateY(-1px)}.drop-hint{color:#aab6cb;font-size:12px;margin-top:12px}.controls{padding:15px 18px 17px;background:linear-gradient(180deg,#101827,#0c1320)}.progress-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}.time{font-size:12px;color:#aebbd0;white-space:nowrap;font-variant-numeric:tabular-nums}.seek{appearance:none;width:100%;height:5px;border-radius:20px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) 0%,#334155 0%,#334155 100%);outline:none;cursor:pointer}.seek::-webkit-slider-thumb{appearance:none;width:13px;height:13px;border-radius:50%;background:white;border:3px solid var(--accent);box-shadow:0 0 0 4px #8b5cf633}.control-row{display:flex;align-items:center;justify-content:space-between;gap:10px}.control-group{display:flex;align-items:center;gap:7px}.icon-btn{width:39px;height:38px;padding:0;display:grid;place-items:center;font-size:16px}.play{width:46px;height:42px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--accent),#536dff);font-size:18px}.volume{width:85px;accent-color:var(--accent)}.select{background:#111a2a;border:1px solid var(--line);color:#e7ecf7;border-radius:10px;padding:8px;font-size:12px;max-width:105px}.now-playing{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px 4px}.track-title{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track-sub{font-size:12px;color:var(--muted)}.tag{font-size:11px;padding:5px 9px;border-radius:20px;background:#17243a;color:#a5b4fc;border:1px solid #293a5a}
+.sidebar{background:#0e1625;border:1px solid var(--line);border-radius:22px;padding:18px;min-height:500px}.side-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.side-head h3{margin:0;font-size:16px}.count{color:var(--muted);font-size:12px}.side-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.action{font-size:12px;text-align:center;padding:10px 7px}.action strong{font-size:16px;display:block;margin-bottom:2px}.playlist{display:flex;flex-direction:column;gap:7px;max-height:430px;overflow:auto}.empty{border:1px dashed #34435b;border-radius:15px;padding:24px 14px;text-align:center;color:var(--muted);font-size:13px}.track{display:flex;align-items:center;gap:10px;padding:10px;border-radius:13px;border:1px solid transparent;background:#121e30;cursor:pointer}.track:hover{border-color:#46577a}.track.active{background:#28234b;border-color:#7663df}.thumb{width:38px;height:38px;flex:none;border-radius:10px;background:linear-gradient(135deg,#3b2e70,#155e75);display:grid;place-items:center}.track-info{min-width:0;flex:1}.track-name{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track-meta{font-size:10px;color:var(--muted)}.remove{border:0;background:transparent;color:#8795aa;padding:5px}.remove:hover{color:#fb7185}.below{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}.feature{padding:15px;background:#111a2a;border:1px solid var(--line);border-radius:16px}.feature b{display:block;font-size:13px;margin:5px 0}.feature span{font-size:11px;color:var(--muted)}.feature .emoji{font-size:18px}
+input[type=file]{display:none}.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#202d42;border:1px solid #52617b;padding:10px 16px;border-radius:12px;font-size:13px;transition:.25s;z-index:10}.toast.show{opacity:1;transform:translate(-50%,0)}.keyboard{font-size:11px;color:var(--muted);text-align:center;margin-top:15px}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.sidebar{min-height:auto}.playlist{max-height:260px}.below{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:600px){.app{padding:14px}.topbar{align-items:flex-start}.brand h1{font-size:17px}.top-actions .status{display:none}.top-actions .pill{padding:9px;font-size:12px}.screen{aspect-ratio:16/10}.controls{padding:12px}.control-row{flex-wrap:wrap}.control-group{gap:5px}.icon-btn{width:35px;height:35px}.volume{width:65px}.below{grid-template-columns:1fr}.now-playing{padding:12px 2px}.select{max-width:86px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="logo">▶</div><div><h1>Nova Player</h1><p>Universal media experience</p></div></div>
+    <div class="top-actions"><div class="status"><span class="dot"></span> Ready to play</div><button class="pill" id="themeBtn">☼ Appearance</button></div>
+  </header>
+  <div class="layout">
+    <main class="main">
+      <section class="player-shell">
+        <div class="screen" id="screen">
+          <video id="video" playsinline preload="metadata"></video>
+          <div class="welcome">
+            <div class="big-icon">▶</div>
+            <h2>Your media, your way.</h2>
+            <p>Play videos and music from your device in a clean, powerful player.</p>
+            <button class="primary" id="browseBtn">＋ Open media</button>
+            <div class="drop-hint">or drag and drop a video or audio file here</div>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="progress-row"><span class="time" id="current">00:00</span><input class="seek" id="seek" type="range" min="0" max="1000" value="0"><span class="time" id="duration">00:00</span></div>
+          <div class="control-row">
+            <div class="control-group">
+              <button class="icon-btn" id="back" title="Back 10 seconds">↶</button>
+              <button class="icon-btn play" id="play" title="Play / Pause">▶</button>
+              <button class="icon-btn" id="forward" title="Forward 10 seconds">↷</button>
+              <button class="icon-btn" id="mute" title="Mute">◖))</button>
+              <input class="volume" id="volume" type="range" min="0" max="1" step=".01" value=".85" aria-label="Volume">
+            </div>
+            <div class="control-group">
+              <select class="select" id="speed" title="Playback speed"><option value=".5">0.5×</option><option value=".75">0.75×</option><option value="1" selected>1.0×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="1.75">1.75×</option><option value="2">2.0×</option></select>
+              <button class="icon-btn" id="pip" title="Picture in Picture">▣</button>
+              <button class="icon-btn" id="full" title="Fullscreen">⛶</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="now-playing"><div style="min-width:0"><div class="track-title" id="nowTitle">Nothing playing</div><div class="track-sub" id="nowSub">Choose a file to begin your session</div></div><span class="tag">NOVA • PLAYER</span></div>
+      <section class="below">
+        <div class="feature"><div class="emoji">⚡</div><b>Quick controls</b><span>Keyboard shortcuts and precise seeking.</span></div>
+        <div class="feature"><div class="emoji">🎚️</div><b>Playback your way</b><span>Adjust speed, volume and screen mode.</span></div>
+        <div class="feature"><div class="emoji">📁</div><b>Local playlist</b><span>Queue multiple files from your device.</span></div>
+      </section>
+      <div class="keyboard">SPACE Play/Pause　·　←/→ Seek 5 sec　·　F Fullscreen　·　M Mute</div>
+    </main>
+    <aside class="sidebar">
+      <div class="side-head"><h3>Up next</h3><span class="count" id="count">0 files</span></div>
+      <div class="side-actions">
+        <button class="action" id="addFiles"><strong>＋</strong>Add files</button>
+        <button class="action" id="addFolder"><strong>▤</strong>Add folder</button>
+      </div>
+      <div class="playlist" id="playlist"><div class="empty">Your playlist is empty.<br>Start by adding media files.</div></div>
+    </aside>
+  </div>
+</div>
+<input type="file" id="fileInput" accept="video/*,audio/*" multiple>
+<input type="file" id="folderInput" accept="video/*,audio/*" webkitdirectory multiple>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+const video=$('video'),screenEl=$('screen'),fileInput=$('fileInput'),folderInput=$('folderInput');
+let items=[],active=-1,dragDepth=0;
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2300)}
+function fmt(s){if(!Number.isFinite(s))return'00:00';let h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=Math.floor(s%60);return h?`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`}
+function niceSize(n){if(!n)return'';let u=['B','KB','MB','GB'],i=0;while(n>=1024&&i<3){n/=1024;i++}return n.toFixed(i?1:0)+' '+u[i]}
+function addFiles(files){let added=0;[...files].forEach(file=>{if(!file.type.startsWith('video/')&&!file.type.startsWith('audio/')&&!/\.(mp4|m4v|webm|ogv|mov|mp3|wav|ogg|m4a|aac|flac)$/i.test(file.name))return;items.push({file,url:URL.createObjectURL(file),name:file.name,size:file.size});added++});render();if(added){toast(`${added} file${added>1?'s':''} added`);if(active<0)load(0)}else toast('No supported media files found')}
+function render(){$('count').textContent=`${items.length} file${items.length===1?'':'s'}`;const list=$('playlist');list.innerHTML='';if(!items.length){list.innerHTML='<div class="empty">Your playlist is empty.<br>Start by adding media files.</div>';return}items.forEach((it,i)=>{const row=document.createElement('div');row.className='track'+(i===active?' active':'');row.innerHTML=`<div class="thumb">${it.file.type.startsWith('audio/')?'♫':'▶'}</div><div class="track-info"><div class="track-name"></div><div class="track-meta">${niceSize(it.size)} · ${it.file.type.startsWith('audio/')?'Audio':'Video'}</div></div><button class="remove" title="Remove">×</button>`;row.querySelector('.track-name').textContent=it.name;row.addEventListener('click',e=>{if(!e.target.closest('.remove'))load(i)});row.querySelector('.remove').addEventListener('click',e=>{e.stopPropagation();URL.revokeObjectURL(items[i].url);items.splice(i,1);if(i===active){video.pause();active=-1;if(items.length)load(Math.min(i,items.length-1));else reset()}else if(i<active)active--;render()});list.appendChild(row)})}
+function load(i){if(!items[i])return;active=i;video.src=items[i].url;video.load();screenEl.classList.add('has-video');$('nowTitle').textContent=items[i].name;$('nowSub').textContent=`${items[i].file.type||'Media file'} · ${niceSize(items[i].size)}`;render();video.play().catch(()=>toast('Press play to start this media'))}
+function reset(){screenEl.classList.remove('has-video');$('nowTitle').textContent='Nothing playing';$('nowSub').textContent='Choose a file to begin your session';$('play').textContent='▶';render()}
+$('browseBtn').onclick=()=>fileInput.click();$('addFiles').onclick=()=>fileInput.click();$('addFolder').onclick=()=>folderInput.click();
+fileInput.onchange=e=>{addFiles(e.target.files);e.target.value=''};folderInput.onchange=e=>{addFiles(e.target.files);e.target.value=''};
+$('play').onclick=()=>{if(!video.src){fileInput.click();return}video.paused?video.play():video.pause()};
+video.onplay=()=>$('play').textContent='Ⅱ';video.onpause=()=>$('play').textContent='▶';
+video.ontimeupdate=()=>{if(!video.duration)return;$('current').textContent=fmt(video.currentTime);$('duration').textContent=fmt(video.duration);$('seek').value=video.currentTime/video.duration*1000;let p=$('seek').value/10;$('seek').style.background=`linear-gradient(to right,var(--accent) ${p}%,#334155 ${p}%)`};
+video.onloadedmetadata=()=>{$('duration').textContent=fmt(video.duration)};
+$('seek').oninput=()=>{if(video.duration)video.currentTime=$('seek').value/1000*video.duration};
+$('back').onclick=()=>video.currentTime=Math.max(0,video.currentTime-10);$('forward').onclick=()=>video.currentTime=Math.min(video.duration||Infinity,video.currentTime+10);
+$('volume').oninput=e=>{video.volume=+e.target.value;video.muted=video.volume===0;$('mute').textContent=video.muted?'×':'◖))'};
+$('mute').onclick=()=>{video.muted=!video.muted;$('mute').textContent=video.muted?'×':'◖))'};
+$('speed').onchange=e=>video.playbackRate=+e.target.value;
+$('full').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else $('screen').requestFullscreen?.()};
+$('pip').onclick=async()=>{try{if(document.pictureInPictureElement)await document.exitPictureInPicture();else if(document.pictureInPictureEnabled&&video.readyState>=1)await video.requestPictureInPicture();else toast('Picture in Picture is not supported here')}catch(e){toast('Picture in Picture unavailable')}};
+video.onended=()=>{if(active<items.length-1)load(active+1)};
+$('themeBtn').onclick=()=>{const root=document.documentElement;const light=root.dataset.theme!=='light';root.dataset.theme=light?'light':'dark';if(light){root.style.setProperty('--bg','#edf1f8');root.style.setProperty('--panel','#fff');root.style.setProperty('--text','#182235');root.style.setProperty('--muted','#607089');root.style.setProperty('--line','#d6deea');root.style.setProperty('--panel2','#e5eaf3');document.body.style.background='linear-gradient(135deg,#e9e8ff,#e4f7fa)'}else{['--bg','--panel','--text','--muted','--line','--panel2'].forEach((v,i)=>root.style.removeProperty(v));document.body.style.background='radial-gradient(ellipse at 12% 0%,#1d1741 0,transparent 34%),radial-gradient(ellipse at 95% 10%,#0b3444 0,transparent 30%),var(--bg)'}};
+document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))return;if(e.code==='Space'){e.preventDefault();$('play').click()}if(e.key==='ArrowLeft')video.currentTime=Math.max(0,video.currentTime-5);if(e.key==='ArrowRight')video.currentTime=Math.min(video.duration||Infinity,video.currentTime+5);if(e.key.toLowerCase()==='f')$('full').click();if(e.key.toLowerCase()==='m')$('mute').click()});
+['dragenter','dragover'].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault();dragDepth++;screenEl.style.outline='2px dashed #8b5cf6';screenEl.style.outlineOffset='-8px'}));
+['dragleave','drop'].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault();dragDepth=Math.max(0,dragDepth-1);if(ev==='drop')addFiles(e.dataTransfer.files);if(!dragDepth)screenEl.style.outline='none'}));
+window.addEventListener('beforeunload',()=>items.forEach(x=>URL.revokeObjectURL(x.url)));
+</script>
+</body>
+</html>
