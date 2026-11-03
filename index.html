@@ -3,214 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#17191d">
+<meta name="theme-color" content="#090d1d">
 <title>Universal Media Player</title>
 <style>
-:root{color-scheme:dark;--bg:#111317;--panel:#1b1e24;--panel2:#22262e;--line:#303640;--text:#f4f6fa;--muted:#9aa3b2;--accent:#ff9d21;--accent2:#ffbd59}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,system-ui,Segoe UI,Arial,sans-serif}
-button,input,select{font:inherit}button{cursor:pointer;color:inherit;border:1px solid var(--line);background:#282d36;border-radius:8px;padding:9px 12px}button:hover{border-color:var(--accent);background:#333945}button.primary{background:var(--accent);color:#17191d;border-color:var(--accent);font-weight:750}
-header{height:64px;display:flex;align-items:center;gap:16px;padding:0 20px;border-bottom:1px solid var(--line);background:#171a20;position:sticky;top:0;z-index:5}
-.brand{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:850;letter-spacing:.4px;white-space:nowrap}.cone{width:28px;height:28px;background:var(--accent);clip-path:polygon(50% 0,100% 100%,0 100%);position:relative}.brand small{color:var(--muted);font-size:10px;letter-spacing:1.6px;display:block}
-.topnav{display:flex;gap:7px;margin-left:auto}.topnav button{background:transparent;border-color:transparent;color:var(--muted)}
-main{max-width:1600px;margin:auto;padding:18px;display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px}
-.stage{min-width:0}.screen{aspect-ratio:16/9;min-height:260px;background:#050608;border:1px solid #292e37;border-radius:14px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
-#video{width:100%;height:100%;object-fit:contain;background:#050608;display:none}#embedHost{width:100%;height:100%;display:none;align-items:center;justify-content:center;background:#050608}#embedHost iframe{width:100%;height:100%;border:0}
-.welcome{text-align:center;padding:30px;color:#c9ced8}.welcome .bigcone{font-size:60px;color:var(--accent)}.welcome h1{margin:8px 0 5px;font-size:24px}.welcome p{color:var(--muted);margin:0 auto 18px;max-width:520px}
-#dropHint{position:absolute;inset:12px;border:2px dashed transparent;border-radius:10px;pointer-events:none}#dropHint.active{border-color:var(--accent);background:#ff9d2112}
-.nowplaying{display:flex;align-items:center;gap:12px;padding:14px 2px 10px}.np-icon{width:42px;height:42px;border-radius:10px;background:#2a2f38;display:grid;place-items:center;color:var(--accent);font-size:20px}.np-text{min-width:0}.np-text strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.np-text span{color:var(--muted);font-size:12px}.np-actions{margin-left:auto;display:flex;gap:6px}
-.controls{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px}
-.timeline{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}input[type=range]{accent-color:var(--accent);cursor:pointer}.timeline input{flex:1;min-width:40px}
-.transport{display:flex;align-items:center;justify-content:center;gap:8px;margin:13px 0}.transport button{min-width:42px;height:40px}.transport .play{width:54px;height:48px;font-size:20px;border-radius:12px}
-.toolrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.toolrow button{font-size:12px;padding:7px 10px}.toolrow select{background:#282d36;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px}
-.volume{display:flex;align-items:center;gap:7px;margin-left:auto}.volume input{width:90px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}.panelhead{padding:14px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-weight:750}.panelbody{padding:14px}
-.tabs{display:flex;gap:5px;padding:10px 12px 0}.tabs button{flex:1;background:transparent;color:var(--muted);font-size:12px}.tabs button.active{background:#343a45;color:var(--text);border-color:#4a5260}
-.field{display:flex;gap:7px;margin:9px 0}.field input{min-width:0;flex:1;background:#111419;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px}
-.hint{font-size:11px;color:var(--muted);margin:7px 0 12px}.playlist{max-height:300px;overflow:auto}.empty{padding:20px;text-align:center;color:var(--muted);font-size:12px}
-.track{display:flex;gap:9px;align-items:center;padding:10px 13px;border-bottom:1px solid #2b3038;cursor:pointer}.track:hover,.track.active{background:#2b3038}.track .fileico{color:var(--accent);font-size:18px}.track .trackname{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.track .remove{padding:3px 7px;font-size:11px}
-.sidecol{display:flex;flex-direction:column;gap:14px}.featurelist{display:grid;grid-template-columns:1fr 1fr;gap:8px}.feature{background:#242932;border:1px solid #303640;border-radius:9px;padding:10px}.feature b{display:block;font-size:12px}.feature span{color:var(--muted);font-size:10px}
-.dropbox{border:1px dashed #59616e;border-radius:10px;padding:16px;text-align:center;color:var(--muted);font-size:12px}.dropbox strong{color:var(--text);display:block;margin-bottom:4px}
-footer{max-width:1600px;margin:0 auto;padding:0 18px 22px;color:#737d8b;font-size:11px}
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#303640;border:1px solid #525b68;padding:10px 16px;border-radius:9px;opacity:0;pointer-events:none;transition:.2s;z-index:10}.toast.show{opacity:1}
-.modalback{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;z-index:20;padding:18px}.modal{width:min(520px,100%);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}.modal h2{margin:0 0 10px}.modal p{color:var(--muted);font-size:13px}.modal .field{margin:14px 0}
-@media(max-width:950px){main{grid-template-columns:1fr}.sidecol{display:grid;grid-template-columns:1fr 1fr}.sidecol .panel:first-child{grid-row:span 2}}
-@media(max-width:600px){header{padding:0 12px}.topnav button:not(:first-child){display:none}main{padding:10px;gap:12px}.screen{min-height:220px;aspect-ratio:16/10}.sidecol{display:flex}.np-actions button{padding:7px}.volume{margin-left:0}.toolrow{gap:5px}.toolrow button{padding:7px}.controls{padding:10px}}
+:root{--bg:#090d1d;--panel:#111831;--panel2:#17213d;--line:rgba(255,255,255,.1);--muted:#9aa7c7;--text:#f5f7ff;--a:#8b5cf6;--b:#22d3ee;--good:#34d399}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#20265a 0,transparent 38%),radial-gradient(ellipse at 90% 15%,#123b55 0,transparent 30%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;min-height:100vh}
+header{max-width:1200px;margin:auto;padding:24px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:-.5px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--a),var(--b));display:grid;place-items:center;box-shadow:0 8px 30px #5b5bd855}.logo svg{width:22px}
+.pill{border:1px solid var(--line);border-radius:30px;padding:8px 12px;color:#c7d2fe;font-size:12px;background:#ffffff08}
+main{max-width:1200px;margin:20px auto 60px;padding:0 22px}.hero{text-align:center;margin:34px auto 28px;max-width:760px}.eyebrow{color:#a5b4fc;font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:800}.hero h1{font-size:clamp(32px,6vw,58px);line-height:1.04;letter-spacing:-2px;margin:13px 0}.gradient{background:linear-gradient(90deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);line-height:1.7;margin:0 auto;max-width:620px}
+.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(270px,.75fr);gap:18px;align-items:start}.panel{background:linear-gradient(180deg,#151e39ed,#10172ded);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 70px #0005;overflow:hidden}.panel-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}.panel-head h2{font-size:15px;margin:0}.panel-body{padding:20px}.input-wrap{display:flex;gap:9px;padding:7px;background:#080e20;border:1px solid #344164;border-radius:15px}.input-wrap input{min-width:0;flex:1;background:transparent;border:0;outline:0;color:white;padding:9px 10px;font-size:14px}.input-wrap input::placeholder{color:#7180a4}
+button{border:0;cursor:pointer;font-weight:750;border-radius:11px;padding:12px 16px;color:#fff;background:linear-gradient(110deg,#7c3aed,#2563eb);transition:.2s;white-space:nowrap}button:hover{filter:brightness(1.13);transform:translateY(-1px)}button:disabled{opacity:.45;cursor:not-allowed;transform:none}.secondary{background:#ffffff0b;border:1px solid var(--line);color:#dbeafe}.download{background:linear-gradient(110deg,#059669,#0d9488)}.hint{font-size:12px;color:var(--muted);line-height:1.55;margin:12px 2px 0}
+.player{margin-top:18px;aspect-ratio:16/9;background:linear-gradient(135deg,#080d1d,#1b2750);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:grid;place-items:center;position:relative}.player video,.player iframe{width:100%;height:100%;border:0;background:#000}.placeholder{text-align:center;padding:20px;color:#9eadd0}.play-icon{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;margin:0 auto 13px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);box-shadow:0 8px 35px #6366f166}.placeholder p{font-size:13px;margin:0}
+.status{margin-top:14px;padding:12px 14px;border-radius:12px;background:#ffffff08;color:#c5d0eb;font-size:12px;line-height:1.5;min-height:42px}.status.error{color:#fca5a5;background:#ef444414}.status.success{color:#6ee7b7;background:#10b98114}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.actions button{flex:1}
+.side-section{padding:18px 20px;border-bottom:1px solid var(--line)}.side-section:last-child{border-bottom:0}.side-section h3{font-size:13px;margin:0 0 12px}.platforms{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.platform{background:#ffffff08;border:1px solid var(--line);border-radius:12px;padding:11px;font-size:12px;color:#d7def2}.platform span{display:block;color:#91a0c2;font-size:10px;margin-top:4px}
+.tip{font-size:12px;line-height:1.65;color:var(--muted)}.tip strong{color:#e2e8f0}.steps{display:grid;gap:12px}.step{display:flex;gap:10px;font-size:12px;color:#b8c4e0;line-height:1.5}.num{flex:0 0 23px;height:23px;border-radius:8px;background:#8b5cf626;color:#c4b5fd;display:grid;place-items:center;font-weight:800}
+footer{max-width:1200px;margin:auto;padding:0 22px 35px;color:#7180a4;font-size:11px;text-align:center;line-height:1.6}
+@media(max-width:820px){.layout{grid-template-columns:1fr}.hero{margin-top:20px}header{padding-top:18px}.pill{display:none}}
+@media(max-width:480px){main{padding:0 13px}.panel-body{padding:14px}.input-wrap{flex-wrap:wrap}.input-wrap input{flex-basis:100%;padding:10px}.input-wrap button{flex:1}.actions button{flex-basis:100%}.hero h1{letter-spacing:-1.2px}}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand"><span class="cone"></span><span>UNIVERSAL MEDIA PLAYER <small>ALL-IN-ONE VIDEO & AUDIO</small></span></div>
-  <div class="topnav"><button id="openFilesTop">＋ Open media</button><button id="openUrlTop">↗ Open URL</button><button id="aboutBtn">About</button></div>
+  <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M7 4.8c0-.8.9-1.3 1.6-.9l11 6.2a1 1 0 0 1 0 1.8l-11 6.2c-.7.4-1.6-.1-1.6-.9V4.8Z"/></svg></div>Universal Media Player</div>
+  <div class="pill">PLAY • PREVIEW • SAVE</div>
 </header>
 <main>
-<section class="stage">
-  <div class="screen" id="screen">
-    <video id="video" playsinline preload="metadata"></video>
-    <div id="embedHost"></div>
-    <div class="welcome" id="welcome"><div class="bigcone">▲</div><h1>Universal Media Player</h1><p>Play local media and supported social videos from one clean workspace.</p><button class="primary" id="welcomeOpen">＋ Open a file</button></div>
-    <div id="dropHint"></div>
-  </div>
-  <div class="nowplaying">
-    <div class="np-icon">▶</div><div class="np-text"><strong id="mediaTitle">Nothing playing</strong><span id="mediaSub">Open a file or paste a supported link</span></div>
-    <div class="np-actions"><button id="pipBtn" title="Picture in Picture">▣</button><button id="fullscreenBtn" title="Fullscreen">⛶</button></div>
-  </div>
-  <div class="controls">
-    <div class="timeline"><span id="currentTime">00:00</span><input id="seek" type="range" min="0" max="1000" value="0"><span id="duration">00:00</span></div>
-    <div class="transport">
-      <button id="prevBtn" title="Previous">|◀</button><button id="backBtn" title="Back 10 seconds">↶10</button>
-      <button class="play primary" id="playBtn" title="Play / Pause">▶</button><button id="forwardBtn" title="Forward 10 seconds">10↷</button><button id="nextBtn" title="Next">▶|</button>
-    </div>
-    <div class="toolrow">
-      <button id="muteBtn">🔊</button><div class="volume"><input id="volume" type="range" min="0" max="1" step=".01" value=".85"></div>
-      <select id="speed" title="Playback speed"><option value=".5">0.5×</option><option value=".75">0.75×</option><option value="1" selected>1× Speed</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="1.75">1.75×</option><option value="2">2×</option></select>
-      <button id="subBtn">＋ Subtitles</button><button id="downloadBtn">⬇ Download</button><button id="loopBtn">↻ Loop: Off</button>
-    </div>
-  </div>
-</section>
-<aside class="sidecol">
-  <section class="panel">
-    <div class="panelhead">Media library <span id="count" style="color:var(--muted);font-size:11px">0 items</span></div>
-    <div class="tabs"><button class="active" data-tab="files">Playlist</button><button data-tab="links">Online</button></div>
-    <div class="panelbody" id="filesTab">
-      <div class="dropbox" id="dropbox"><strong>Drop media here</strong>or choose files from your device</div>
-      <div class="field"><button class="primary" id="browseBtn" style="flex:1">＋ Add files</button><button id="folderBtn">Folder</button></div>
-      <div class="playlist" id="playlist"><div class="empty">Your playlist is empty.</div></div>
-    </div>
-    <div class="panelbody" id="linksTab" style="display:none">
-      <label class="hint">Paste a supported YouTube, Instagram, TikTok, Facebook, X, Vimeo, or direct media URL.</label>
-      <div class="field"><input id="urlInput" placeholder="https://youtu.be/..."><button class="primary" id="playUrlBtn">Play</button></div>
-      <div class="hint">Uses official embeds where available. Private posts, login gates, region limits, disabled embeds, and platform policies still apply.</div>
-    </div>
+  <section class="hero">
+    <div class="eyebrow">Your media, one place</div>
+    <h1>Watch more. <span class="gradient">Enjoy everything.</span></h1>
+    <p>Play direct video links, preview supported social posts, and save media files when the source permits downloading.</p>
   </section>
-  <section class="panel">
-    <div class="panelhead">Advanced tools</div><div class="panelbody">
-      <div class="featurelist">
-        <div class="feature"><b>⌨ Keyboard control</b><span>Space, arrows, M, F</span></div>
-        <div class="feature"><b>▣ Picture in Picture</b><span>Floating video window</span></div>
-        <div class="feature"><b>CC Subtitles</b><span>Load .vtt / .srt* files</span></div>
-        <div class="feature"><b>↻ A-B ready</b><span>Loop current media</span></div>
+  <div class="layout">
+    <section class="panel">
+      <div class="panel-head"><h2> <span style="color:#67e8f9">●</span> Media workspace</h2><span class="pill">PLAYER 01</span></div>
+      <div class="panel-body">
+        <div class="input-wrap">
+          <input id="urlInput" type="url" placeholder="Paste a video URL or social media link…" autocomplete="url">
+          <button id="loadBtn">Load link</button>
+        </div>
+        <p class="hint">Supports direct MP4, WebM, Ogg and HLS links where browser playback is allowed. YouTube and Instagram links may open an official embed preview.</p>
+        <div class="player" id="player">
+          <div class="placeholder"><div class="play-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><p>Your video preview will appear here</p></div>
+        </div>
+        <div class="status" id="status" role="status">Ready. Paste a link above to get started.</div>
+        <div class="actions">
+          <button class="download" id="downloadBtn" disabled>↓ Download media</button>
+          <button class="secondary" id="openBtn" disabled>↗ Open original link</button>
+          <button class="secondary" id="clearBtn">Clear player</button>
+        </div>
       </div>
-      <p class="hint">*SRT support depends on browser; WebVTT (.vtt) is recommended. Local playback depends on browser codec support.</p>
-    </div>
-  </section>
-  <section class="panel">
-    <div class="panelhead">Quick tips</div><div class="panelbody hint" style="line-height:1.8">
-      <b>Space</b> Play / pause<br><b>← / →</b> Seek 5 seconds<br><b>Shift + ← / →</b> Seek 10 seconds<br><b>↑ / ↓</b> Volume<br><b>M</b> Mute &nbsp; <b>F</b> Fullscreen<br><b>0–9</b> Jump through video
-    </div>
-  </section>
-</aside>
+    </section>
+    <aside class="panel">
+      <div class="panel-head"><h2>Quick guide</h2><span class="pill">HELP</span></div>
+      <div class="side-section">
+        <h3>Link types</h3>
+        <div class="platforms">
+          <div class="platform">MP4 / WebM<span>Play + download if allowed</span></div>
+          <div class="platform">YouTube<span>Official embed preview</span></div>
+          <div class="platform">Instagram<span>Official embed where available</span></div>
+          <div class="platform">Other links<span>Open original page</span></div>
+        </div>
+      </div>
+      <div class="side-section">
+        <h3>How it works</h3>
+        <div class="steps">
+          <div class="step"><div class="num">1</div><div>Copy a video URL from the source app or website.</div></div>
+          <div class="step"><div class="num">2</div><div>Paste it into the link box and tap <strong>Load link</strong>.</div></div>
+          <div class="step"><div class="num">3</div><div>If it is a direct media file, use <strong>Download media</strong> when enabled.</div></div>
+        </div>
+      </div>
+      <div class="side-section">
+        <h3>Download note</h3>
+        <p class="tip">A webpage link is not necessarily a video-file link. Social platforms may require login, block third-party access, or restrict downloads. This browser-only player <strong>cannot download every social-media video</strong> or bypass DRM, privacy settings, or platform restrictions. Only save content you own or have permission to download.</p>
+      </div>
+    </aside>
+  </div>
 </main>
-<footer>Universal Media Player is an independent browser-based player and is not affiliated with or endorsed by VideoLAN, YouTube, or Instagram. Social playback uses official embeds where available. Downloads are limited to media you own or are authorized to save, and direct URLs whose servers permit downloading.</footer>
-<input type="file" id="filePicker" accept="video/*,audio/*" multiple hidden>
-<input type="file" id="folderPicker" accept="video/*,audio/*" webkitdirectory multiple hidden>
-<input type="file" id="subtitlePicker" accept=".vtt,.srt,text/vtt" hidden>
-<div class="toast" id="toast"></div>
-<div class="modalback" id="modal"><div class="modal"><h2>About Universal Media Player</h2><p>A single-file media player with local playback, playlists, subtitles, picture-in-picture, direct media downloads, and official social-platform embeds.</p><p><b>Important:</b> YouTube and Instagram playback is provided through their official embedded experiences. This page cannot bypass private posts, age restrictions, login requirements, geo-blocks, ads, or creator-disabled embedding. It does not download or extract protected streams.</p><button class="primary" id="closeModal">Close</button></div></div>
+<footer>Universal Media Player • Runs locally in your browser. No account required. Media playback and downloads depend on the source website, browser support, and your permissions.</footer>
 <script>
-(() => {
-const $ = id => document.getElementById(id);
-const video = $('video'), host = $('embedHost'), welcome = $('welcome');
-let items = [], active = -1, objectUrls = [], loop = false, embedType = '';
-const fmt = s => { if (!Number.isFinite(s)) return '00:00'; s=Math.max(0,Math.floor(s)); return `${String(Math.floor(s/3600)).padStart(2,'0')}:${String(Math.floor(s%3600/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`.replace(/^00:/,''); };
-function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
-function setTitle(title,sub='Local media'){ $('mediaTitle').textContent=title; $('mediaSub').textContent=sub; }
-function showVideo(){host.style.display='none';host.innerHTML='';video.style.display='block';welcome.style.display='none';embedType='';}
-function showEmbed(){video.pause();video.removeAttribute('src');video.load();video.style.display='none';welcome.style.display='none';host.style.display='flex';}
-function render(){
- $('count').textContent=`${items.length} item${items.length===1?'':'s'}`;
- const list=$('playlist');list.innerHTML='';
- if(!items.length){list.innerHTML='<div class="empty">Your playlist is empty.</div>';return}
- items.forEach((it,i)=>{const row=document.createElement('div');row.className='track'+(i===active?' active':'');
- const ico=document.createElement('span');ico.className='fileico';ico.textContent=it.kind==='url'?'↗':'♫';
- const name=document.createElement('span');name.className='trackname';name.textContent=it.name;name.title=it.name;
- const del=document.createElement('button');del.className='remove';del.textContent='×';del.title='Remove';del.onclick=e=>{e.stopPropagation();if(i===active){video.pause();active=-1;setTitle('Nothing playing','Open a file or paste a supported link');}items.splice(i,1);if(active>i)active--;render()};
- row.append(ico,name,del);row.onclick=()=>playItem(i);list.append(row);
- });
-}
-function addFiles(files){[...files].forEach(file=>{if(!file.type.startsWith('video/')&&!file.type.startsWith('audio/'))return;items.push({name:file.name,kind:'file',file,url:URL.createObjectURL(file)});});render();if(active<0&&items.length)playItem(items.length-1);}
-function playItem(i){if(!items[i])return;active=i;const it=items[i];showVideo();video.src=it.url;video.load();video.play().catch(()=>{});setTitle(it.name,'Local file');render();}
-function parseYoutube(raw){
- try{const u=new URL(raw);let id='';
- if(u.hostname==='youtu.be')id=u.pathname.slice(1).split('/')[0];
- else if(/youtube\.com$|youtube-nocookie\.com$/.test(u.hostname.replace(/^www\./,''))){id=u.searchParams.get('v')||u.pathname.match(/\/(?:embed|shorts|live)\/([^/?]+)/)?.[1]||'';}
- return /^[\w-]{11}$/.test(id)?id:null;}catch{return null}
-}
-function parseInstagram(raw){
- try{const u=new URL(raw);if(!/(^|\.)instagram\.com$/.test(u.hostname))return null;const m=u.pathname.match(/^\/(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/);return m?{platform:'Instagram',url:`https://www.instagram.com/${m[1]==='reels'?'reel':m[1]}/${m[2]}/`}:null;}catch{return null}
-}
-function socialEmbed(raw){
- try{
-  const u=new URL(raw), h=u.hostname.replace(/^www\./,'').toLowerCase();
-  if(h==='tiktok.com'||h.endsWith('.tiktok.com')){
-    const m=u.pathname.match(/\/@[^/]+\/video\/(\d+)/);
-    if(m)return {platform:'TikTok',src:`https://www.tiktok.com/player/v1/${m[1]}?autoplay=1`,url:raw};
+const input=document.getElementById('urlInput'), player=document.getElementById('player');
+const statusBox=document.getElementById('status'), downloadBtn=document.getElementById('downloadBtn'), openBtn=document.getElementById('openBtn');
+let currentUrl='', directMedia=false;
+const videoExt=/\.(mp4|webm|ogg|ogv|m4v)(?:$|[?#])/i;
+function setStatus(msg,type=''){statusBox.textContent=msg;statusBox.className='status '+type}
+function validUrl(raw){try{const u=new URL(raw);return ['http:','https:'].includes(u.protocol)?u:null}catch{return null}}
+function youtubeEmbed(url){
+  const h=url.hostname.replace(/^www\./,'');
+  if(h==='youtu.be') return 'https://www.youtube-nocookie.com/embed/'+url.pathname.slice(1).split('/')[0];
+  if(h==='youtube.com'||h==='m.youtube.com'||h==='youtube-nocookie.com'){
+    if(url.pathname==='/watch'&&url.searchParams.get('v')) return 'https://www.youtube-nocookie.com/embed/'+url.searchParams.get('v');
+    const m=url.pathname.match(/\/(shorts|embed)\/([^/?]+)/);if(m)return 'https://www.youtube-nocookie.com/embed/'+m[2];
   }
-  if(h==='facebook.com'||h==='fb.watch'||h.endsWith('.facebook.com')){
-    return {platform:'Facebook',src:`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(raw)}&show_text=false&autoplay=true`,url:raw};
-  }
-  if(h==='x.com'||h==='twitter.com'){
-    return {platform:'X',tweet:true,url:raw};
-  }
-  if(h==='vimeo.com'||h==='player.vimeo.com'){
-    let id=u.pathname.match(/\/(?:video\/)?(\d+)/)?.[1];
-    if(id)return {platform:'Vimeo',src:`https://player.vimeo.com/video/${id}?autoplay=1`,url:raw};
-  }
- }catch{}
- return null;
+  return '';
 }
-function playOnline(raw){
- const url=raw.trim();if(!url){toast('Paste a link first');return}
- const yt=parseYoutube(url), ig=parseInstagram(url), social=socialEmbed(url);
- if(yt){showEmbed();embedType='YouTube';const iframe=document.createElement('iframe');iframe.src=`https://www.youtube-nocookie.com/embed/${yt}?autoplay=1&rel=0&playsinline=1`;iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';iframe.allowFullscreen=true;iframe.referrerPolicy='strict-origin-when-cross-origin';host.append(iframe);setTitle('YouTube video','Official embedded YouTube player');return;}
- if(ig){showEmbed();embedType='Instagram';const block=document.createElement('blockquote');block.className='instagram-media';block.setAttribute('data-instgrm-permalink',ig.url);block.setAttribute('data-instgrm-version','14');block.style.cssText='background:#fff;max-width:540px;width:100%;margin:0 auto;';host.append(block);const old=document.querySelector('script[data-instagram-embed]');if(old)old.remove();const s=document.createElement('script');s.async=true;s.src='https://www.instagram.com/embed.js';s.dataset.instagramEmbed='1';s.onload=()=>{if(window.instgrm?.Embeds?.process)window.instgrm.Embeds.process()};document.body.append(s);setTitle('Instagram video / Reel','Official Instagram embed');return;}
- if(social?.src){showEmbed();embedType=social.platform;const iframe=document.createElement('iframe');iframe.src=social.src;iframe.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';iframe.allowFullscreen=true;iframe.referrerPolicy='strict-origin-when-cross-origin';host.append(iframe);setTitle(`${social.platform} video`,`Official ${social.platform} embed`);return;}
- if(social?.tweet){showEmbed();embedType='X';const a=document.createElement('a');a.href=url;a.textContent='Open this X post';a.target='_blank';a.rel='noopener noreferrer';a.style.cssText='color:#fff;font-size:18px';host.append(a);const s=document.createElement('script');s.async=true;s.src='https://platform.twitter.com/widgets.js';host.append(s);setTitle('X video post','X post link; playback depends on X embed availability');return;}
- // Direct media URLs can be played and downloaded if the server permits it.
- if(/^https?:\/\//i.test(url)){showVideo();embedType='direct';video.crossOrigin='anonymous';video.src=url;video.load();video.play().catch(()=>toast('Press Play, or check whether this is a direct media URL.'));setTitle(url.split('/').pop().split('?')[0]||'Online media','Direct media URL');return;}
- toast('Unsupported link. Try a supported social URL or direct media URL.');
+function instagramEmbed(url){
+  if(!/(^|\.)instagram\.com$/.test(url.hostname))return '';
+  const m=url.pathname.match(/^\/(reel|p|tv)\/([^/]+)/);return m?'https://www.instagram.com/'+m[1]+'/'+m[2]+'/embed/':'';
 }
-function togglePlay(){if(embedType){toast('Use the controls inside the embedded player');return}if(!video.src){toast('Open a media file first');return}if(video.paused)video.play().catch(()=>{});else video.pause()}
-function updatePlay(){ $('playBtn').textContent=video.paused?'▶':'Ⅱ';}
-function seek(delta){if(Number.isFinite(video.duration))video.currentTime=Math.max(0,Math.min(video.duration,video.currentTime+delta))}
-function openFileDialog(){ $('filePicker').click() }
-$('browseBtn').onclick=openFileDialog;$('welcomeOpen').onclick=openFileDialog;$('openFilesTop').onclick=openFileDialog;
-$('folderBtn').onclick=()=>$('folderPicker').click();
-$('filePicker').onchange=e=>addFiles(e.target.files);$('folderPicker').onchange=e=>addFiles(e.target.files);
-$('openUrlTop').onclick=()=>{document.querySelector('[data-tab="links"]').click();$('urlInput').focus()};
-$('playUrlBtn').onclick=()=>playOnline($('urlInput').value);$('urlInput').onkeydown=e=>{if(e.key==='Enter')playOnline(e.target.value)};
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));$('filesTab').style.display=b.dataset.tab==='files'?'block':'none';$('linksTab').style.display=b.dataset.tab==='links'?'block':'none'});
-$('playBtn').onclick=togglePlay;$('backBtn').onclick=()=>seek(-10);$('forwardBtn').onclick=()=>seek(10);
-$('prevBtn').onclick=()=>{if(active>0)playItem(active-1);else seek(-10)};$('nextBtn').onclick=()=>{if(active<items.length-1)playItem(active+1)};
-video.addEventListener('play',updatePlay);video.addEventListener('pause',updatePlay);
-video.addEventListener('timeupdate',()=>{if(Number.isFinite(video.duration))$('seek').value=video.currentTime/video.duration*1000;$('currentTime').textContent=fmt(video.currentTime);$('duration').textContent=fmt(video.duration)});
-$('seek').oninput=e=>{if(Number.isFinite(video.duration))video.currentTime=e.target.value/1000*video.duration};
-$('volume').oninput=e=>{video.volume=Number(e.target.value);video.muted=false;$('muteBtn').textContent=video.volume===0?'🔇':'🔊'};
-$('muteBtn').onclick=()=>{video.muted=!video.muted;$('muteBtn').textContent=video.muted?'🔇':'🔊'};
-$('speed').onchange=e=>{video.playbackRate=Number(e.target.value)};
-$('loopBtn').onclick=()=>{loop=!loop;video.loop=loop;$('loopBtn').textContent=`↻ Loop: ${loop?'On':'Off'}`;$('loopBtn').style.borderColor=loop?'var(--accent)':''};
-$('fullscreenBtn').onclick=()=>{const target=$('screen');if(document.fullscreenElement)document.exitFullscreen?.();else target.requestFullscreen?.()};
-$('pipBtn').onclick=async()=>{try{if(document.pictureInPictureElement)await document.exitPictureInPicture();else if(document.pictureInPictureEnabled&&video.readyState>=1)await video.requestPictureInPicture();else toast('Picture in Picture is unavailable for this media/browser.')}catch{toast('Picture in Picture is not available for this source.')}};
-$('downloadBtn').onclick=()=>{
- if(active>=0 && items[active]?.kind==='file'){
-   const it=items[active],a=document.createElement('a');a.href=it.url;a.download=it.name;a.click();return;
- }
- if(embedType && embedType!=='direct'){
-   toast('Downloads from embedded social platforms are not exposed here. Use the platform’s official download/save option when available.');return;
- }
- if(embedType==='direct' && video.currentSrc){
-   const a=document.createElement('a');a.href=video.currentSrc;a.download=(video.currentSrc.split('/').pop().split('?')[0]||'video');a.rel='noopener';a.click();
-   toast('Download requested. The server may block cross-origin downloads or force streaming.');return;
- }
- toast('Open a local file or direct media URL first.');
-};
-$('subBtn').onclick=()=>$('subtitlePicker').click();
-$('subtitlePicker').onchange=async e=>{const f=e.target.files[0];if(!f)return;let txt=await f.text();if(f.name.toLowerCase().endsWith('.srt'))txt=txt.replace(/(\d\d:\d\d:\d\d),(\d\d\d)/g,'$1.$2');const blob=new Blob([txt],{type:'text/vtt'}),url=URL.createObjectURL(blob);const old=video.querySelector('track');if(old)old.remove();const track=document.createElement('track');track.kind='subtitles';track.label=f.name;track.srclang='en';track.src=url;track.default=true;video.append(track);track.addEventListener('load',()=>{if(track.track)track.track.mode='showing'});toast('Subtitle track added');};
-$('aboutBtn').onclick=()=>$('modal').style.display='flex';$('closeModal').onclick=()=>$('modal').style.display='none';$('modal').onclick=e=>{if(e.target===$('modal'))$('modal').style.display='none'};
-document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))return;if(e.code==='Space'){e.preventDefault();togglePlay()}else if(e.key==='ArrowLeft')seek(e.shiftKey?-10:-5);else if(e.key==='ArrowRight')seek(e.shiftKey?10:5);else if(e.key==='ArrowUp'){video.volume=Math.min(1,video.volume+.05);$('volume').value=video.volume}else if(e.key==='ArrowDown'){video.volume=Math.max(0,video.volume-.05);$('volume').value=video.volume}else if(e.key.toLowerCase()==='m')$('muteBtn').click();else if(e.key.toLowerCase()==='f')$('fullscreenBtn').click();else if(/^[0-9]$/.test(e.key)&&Number.isFinite(video.duration))video.currentTime=video.duration*Number(e.key)/10;});
-const dropTargets=[$('screen'),$('dropbox')];dropTargets.forEach(el=>{el.addEventListener('dragover',e=>{e.preventDefault();$('dropHint').classList.add('active')});el.addEventListener('dragleave',()=>$('dropHint').classList.remove('active'));el.addEventListener('drop',e=>{e.preventDefault();$('dropHint').classList.remove('active');if(e.dataTransfer.files.length)addFiles(e.dataTransfer.files);else if(e.dataTransfer.getData('text/uri-list'))playOnline(e.dataTransfer.getData('text/uri-list').split('\n')[0]);});});
-window.addEventListener('beforeunload',()=>objectUrls.forEach(URL.revokeObjectURL));
-render();
-})();
+function reset(){player.innerHTML='<div class="placeholder"><div class="play-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><p>Your video preview will appear here</p></div>';currentUrl='';directMedia=false;downloadBtn.disabled=true;openBtn.disabled=true;setStatus('Player cleared. Paste another link when ready.')}
+function load(){
+  const u=validUrl(input.value.trim());
+  if(!u){setStatus('Please enter a valid link beginning with https:// or http://.','error');return}
+  currentUrl=u.href;directMedia=videoExt.test(u.pathname);
+  downloadBtn.disabled=!directMedia;openBtn.disabled=false;player.innerHTML='';
+  if(directMedia){
+    const v=document.createElement('video');v.controls=true;v.playsInline=true;v.preload='metadata';v.src=u.href;player.appendChild(v);
+    v.onerror=()=>setStatus('The source refused playback or the format is unsupported. Try opening the original link.','error');
+    v.onloadedmetadata=()=>setStatus('Direct media detected. Playback is ready. Download availability still depends on the source server.','success');
+    setStatus('Trying to load direct media…');
+    return;
+  }
+  const yt=youtubeEmbed(u);
+  const ig=instagramEmbed(u);
+  if(yt||ig){
+    const frame=document.createElement('iframe');frame.src=yt||ig;frame.title='Social media video preview';frame.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';frame.allowFullscreen=true;player.appendChild(frame);
+    setStatus('Official embed preview loaded. Social-platform links cannot be downloaded by this browser-only page.','success');
+  }else{
+    player.innerHTML='<div class="placeholder"><div class="play-icon">↗</div><p>This link is not a direct video file.<br>Use Open original link to view it on its website.</p></div>';
+    setStatus('This appears to be a webpage/share link, not a direct media file. Open the original page to view it.');
+  }
+}
+document.getElementById('loadBtn').addEventListener('click',load);
+input.addEventListener('keydown',e=>{if(e.key==='Enter')load()});
+openBtn.addEventListener('click',()=>{if(currentUrl)window.open(currentUrl,'_blank','noopener,noreferrer')});
+downloadBtn.addEventListener('click',()=>{
+  if(!currentUrl||!directMedia)return;
+  const a=document.createElement('a');a.href=currentUrl;a.download='';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();
+  setStatus('Download requested. If the browser opens the file instead, or the server blocks downloads, use the source website’s own download option.','success');
+});
+document.getElementById('clearBtn').addEventListener('click',reset);
 </script>
 </body>
 </html>
